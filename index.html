@@ -1,35 +1,39 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
+<meta charset="UTF-8" />
 <title>Chatbot Zen</title>
 <style>
-body { font-family: Arial, sans-serif; display:flex; justify-content:center; align-items:center; height:100vh; background:#f2f2f2; }
-#chat { width:500px; height:400px; border:1px solid #ccc; padding:10px; overflow:auto; background:white; }
-#msg { width:400px; padding:5px; }
+body { font-family: Arial; display:flex;flex-direction:column;align-items:center;padding:20px;}
+#messages { width:80%;height:350px;border:1px solid #ccc;padding:10px;overflow-y:auto;margin-bottom:10px;}
+input { width:70%;padding:6px;}
+button { padding:6px 12px; }
 </style>
 </head>
-<body>
 
-<div id="chat"></div>
-<input id="msg" type="text" placeholder="Écris ton message...">
-<button onclick="send()">Envoyer</button>
+<body>
+<h2>Chat Zen</h2>
+
+<div id="messages"></div>
+
+<input id="messageInput" placeholder="Écris ton message..." />
+<button onclick="sendMessage()">Envoyer</button>
 
 <script>
-const webhookUrl = "https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao";
+const WEBHOOK_URL = "https://hook.eu1.make.com/TON_WEBHOOK_ICI"; // remplace
 
-async function send() {
-    const message = document.getElementById("msg").value;
-    document.getElementById("chat").innerHTML += `<p><b>Toi:</b> ${message}</p>`;
+async function sendMessage() {
+  const message = document.getElementById("messageInput").value;
+  document.getElementById("messages").innerHTML += "<p><b>Toi :</b> " + message + "</p>";
 
-    const response = await fetch(webhookUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message })
-    });
+  const response = await fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message })
+  });
 
-    const data = await response.json();
-    document.getElementById("chat").innerHTML += `<p><b>Bot:</b> ${data.reply}</p>`;
+  const result = await response.text();
+  document.getElementById("messages").innerHTML += "<p><b>Bot :</b> " + result + "</p>";
 }
 </script>
 
