@@ -40,8 +40,18 @@ function addMessage(sender, text) {
     chatbox.innerHTML += `<div class='message'><strong>${sender} :</strong> ${text}</div>`;
     chatbox.scrollTop = chatbox.scrollHeight;
 }
+    const response = await fetch("https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao", {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ message: msg })
+});
+
+const data = await response.text();
+addMessage("🤖 Bot : " + data);
 </script>
 
+
+    
 </body>
 </html>
 
