@@ -2,12 +2,12 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
-<title>Chatbot Zen</title>
+<title>Chat Zen</title>
 <style>
 body { font-family: Arial; display:flex;flex-direction:column;align-items:center;padding:20px;}
-#messages { width:80%;height:350px;border:1px solid #ccc;padding:10px;overflow-y:auto;margin-bottom:10px;}
-input { width:70%;padding:6px;}
-button { padding:6px 12px; }
+#messages { width:90%;height:350px;border:1px solid #ccc;padding:10px;overflow-y:auto;margin-bottom:10px; }
+input { width:80%;padding:8px;font-size:16px; }
+button { padding:8px 18px; margin-left:10px; }
 </style>
 </head>
 
@@ -16,16 +16,26 @@ button { padding:6px 12px; }
 
 <div id="messages"></div>
 
+<div>
 <input id="messageInput" placeholder="Écris ton message..." />
 <button onclick="sendMessage()">Envoyer</button>
+</div>
 
 <script>
-const WEBHOOK_URL = "https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao"; // remplace
+const WEBHOOK_URL = "https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao";
 
 async function sendMessage() {
-  const message = document.getElementById("messageInput").value;
+  const input = document.getElementById("messageInput");
+  const message = input.value.trim();
+  if (!message) return;
+
+  // Affiche le message utilisateur
   document.getElementById("messages").innerHTML += "<p><b>Toi :</b> " + message + "</p>";
 
+  input.value = ""; // Efface la zone de texte
+  input.focus();    // Pour retaper directement
+
+  // Envoi au webhook
   const response = await fetch(WEBHOOK_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -33,12 +43,23 @@ async function sendMessage() {
   });
 
   const result = await response.text();
+
+  // Affiche la réponse du bot
   document.getElementById("messages").innerHTML += "<p><b>Bot :</b> " + result + "</p>";
 }
+
+// Envoi avec la touche Enter
+document.getElementById("messageInput").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    sendMessage();
+  }
+});
 </script>
 
 </body>
 </html>
+
 
 
 
