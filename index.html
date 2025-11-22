@@ -39,6 +39,41 @@ function addMessage(author, text) {
   container.scrollTop = container.scrollHeight;
 }
 </script>
+<script>
+const chatBox = document.getElementById("chatbox");
+const input = document.getElementById("message");
+const button = document.getElementById("send");
+
+// METS TON WEBHOOK MAKE ICI
+const webhookUrl = "https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao";
+
+button.addEventListener("click", async () => {
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    ajouterMessage("Toi", msg);
+    input.value = "";
+
+    try {
+        const response = await fetch(webhookUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: msg })
+        });
+
+        const data = await response.json();
+        ajouterMessage("Bot", data.response);
+    } catch (error) {
+        ajouterMessage("Bot", "❌ Erreur de connexion au serveur");
+    }
+});
+
+function ajouterMessage(expediteur, texte) {
+    chatBox.innerHTML += `<p><strong>${expediteur} :</strong> ${texte}</p>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+}
+</script>
+
 
 </body>
 </html>
