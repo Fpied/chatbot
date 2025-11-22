@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<title>Chatbot Zen Automations</title>
+<style>
+body { font-family: Arial, sans-serif; background:#f5f5f5; padding:20px; }
+#chatbox { width: 100%; max-width: 600px; margin:auto; background:white; padding:20px; border-radius:10px; }
+#messages { height:300px; overflow-y:auto; border:1px solid #ddd; padding:10px; margin-bottom:10px; }
+</style>
+</head>
+<body>
+<div id="chatbox">
+  <div id="messages"></div>
+  <input id="input" placeholder="Écris ton message..." style="width:80%;" />
+  <button onclick="sendMessage()">Envoyer</button>
+</div>
+
+<script>
+const webhookUrl = "https://hook.eu1.make.com/uwz2nsjo2ahj1vd8n4ko3nrhlp9t7lao";
+
+async function sendMessage() {
+  const msg = document.getElementById("input").value;
+  document.getElementById("input").value = "";
+  addMessage("🧑 Toi", msg);
+
+  const res = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message: msg })
+  });
+  const data = await res.json();
+  addMessage("🤖 Bot", data.reply);
+}
+
+function addMessage(author, text) {
+  const container = document.getElementById("messages");
+  container.innerHTML += `<p><b>${author} :</b> ${text}</p>`;
+  container.scrollTop = container.scrollHeight;
+}
+</script>
+
+</body>
+</html>
