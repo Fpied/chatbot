@@ -39,6 +39,11 @@ function addMessage(author, text) {
   container.scrollTop = container.scrollHeight;
 }
 </script>
+
+<div id="chatbox" style="height:300px;overflow:auto;border:1px solid #ddd;padding:10px"></div>
+<input type="text" id="message" placeholder="Écris ton message…" style="width:70%">
+<button id="send">Envoyer</button>
+
 <script>
 const chatBox = document.getElementById("chatbox");
 const input = document.getElementById("message");
